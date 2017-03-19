@@ -20,6 +20,8 @@ public abstract class World {
     protected int width, height, tileWidth, tileHeight, worldAnchorX, worldAnchorY;
     private WorldGrid grid;
 
+    private int nextEntityId = 0;
+
     /**
      * Initialize the world.
      *
@@ -81,7 +83,7 @@ public abstract class World {
     /**
      * Add an entity to the world.
      */
-    public final void addEntity(Entity entity) {
+    public void addEntity(Entity entity) {
         worldEntities.add(entity);
     }
 
@@ -90,7 +92,7 @@ public abstract class World {
      *
      * @param entity the entity that should be removed from the world.
      */
-    public final void removeEntity(Entity entity) {
+    public void removeEntity(Entity entity) {
         worldEntities.remove(entity);
     }
 
@@ -366,6 +368,10 @@ public abstract class World {
      */
     public Location screenToWorldLocation(int pixelX, int pixelY) {
         return new Location((pixelX - worldAnchorX) / tileWidth, (pixelY - worldAnchorY) / tileHeight);
+    }
+
+    public int getNextEntityIdAndInc() {
+        return ++nextEntityId;
     }
 
     /**

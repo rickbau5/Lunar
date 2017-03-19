@@ -134,6 +134,10 @@ public abstract class Entity {
         return entityID;
     }
 
+    public void setEntityID(int entityID) {
+        this.entityID = entityID;
+    }
+
     /**
      * Get the boundingBox
      */
