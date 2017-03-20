@@ -1,12 +1,14 @@
 package me.vrekt.lunar.server.packets;
 
-import com.sun.corba.se.spi.activation.Server;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.entity.living.player.ServerPlayer;
 import me.vrekt.lunar.server.Networking;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**

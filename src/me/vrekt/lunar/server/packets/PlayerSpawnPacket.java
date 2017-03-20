@@ -1,13 +1,10 @@
 package me.vrekt.lunar.server.packets;
 
 import me.vrekt.lunar.entity.living.player.NetworkedPlayer;
-import me.vrekt.lunar.entity.living.player.PlayerEntity;
 import me.vrekt.lunar.entity.living.player.ServerPlayer;
 import me.vrekt.lunar.server.Networking;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**

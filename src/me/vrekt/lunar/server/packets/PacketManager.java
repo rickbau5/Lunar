@@ -5,8 +5,6 @@ import me.vrekt.lunar.utilities.CheckedConsumer;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Created by Rick on 3/18/2017.

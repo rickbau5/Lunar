@@ -19,6 +19,8 @@ public class RemoteClient implements Runnable {
     private Queue<Packet> inboundPacketQueue;
     private Queue<Packet> outboundPacketQueue;
 
+    private boolean _destroy = false;
+
     public RemoteClient(NetworkedGame game, int id, Socket clientSocket) {
         this.game = game;
         this.id = id;
@@ -32,6 +34,10 @@ public class RemoteClient implements Runnable {
     }
 
     public void destroy() {
+        _destroy = true;
+    }
+
+    private void _doDestroy() {
         if (socket != null && !socket.isClosed()) {
             try {
                 socket.close();
@@ -66,6 +72,10 @@ public class RemoteClient implements Runnable {
             OutputStream outputStream = socket.getOutputStream();
 
             while (isConnected()) {
+                if (_destroy) {
+                    _doDestroy();
+                    return;
+                }
                 if (inputStream.available() > 0) {
                     int marker = inputStream.read();
                     if (marker != -1) {
@@ -81,6 +91,7 @@ public class RemoteClient implements Runnable {
                             System.out.println("Couldn't instantiate class for packet " + marker + ". Missing default constructor?");
                             e.printStackTrace();
                         } catch (IllegalAccessException e) {
+                            System.out.println("Couldn't instantiate class for packet " + marker + ". Private default constructor?");
                             e.printStackTrace();
                         }
                         if (packet != null) {

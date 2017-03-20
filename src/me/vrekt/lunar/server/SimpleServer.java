@@ -7,9 +7,7 @@ import me.vrekt.lunar.server.packets.PlayerJoinPacket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Rick on 3/18/2017.
@@ -20,16 +18,17 @@ public class SimpleServer {
         private final int port;
 
         private ServerSocket serverSocket;
-        private final List<RemoteClient> clients;
+        private final Map<Integer, RemoteClient> clients;
         private int clientID;
 
         private boolean open = true;
+        private boolean _stop;
 
         public ClientListener(String address, int port) {
             this.address = address;
             this.port = port;
 
-            clients = Collections.synchronizedList(new ArrayList<RemoteClient>());
+            clients = Collections.synchronizedMap(new HashMap<Integer, RemoteClient>());
             clientID = 0;
         }
 
@@ -60,7 +59,7 @@ public class SimpleServer {
                 if (clientSocket != null) {
                     RemoteClient newClient = new RemoteClient(game, clientID++, clientSocket);
                     newClient.addPacketToOutbound(new HandshakePacket(newClient));
-                    clients.add(newClient);
+                    clients.put(newClient.getId(), newClient);
                     System.out.println("Accepted client: " + (clientID - 1));
                 }
             }
@@ -69,6 +68,15 @@ public class SimpleServer {
         public synchronized boolean isOpen() {
             return open;
         }
+
+        public void stop() {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                System.out.println("Problem closing ClientListener socket.");
+                e.printStackTrace();
+            }
+        }
     }
 
     private ClientListener clientListener;
@@ -76,12 +84,14 @@ public class SimpleServer {
     private NetworkedGame game;
 
     private final List<Packet> sendToClients;
+    private final List<Integer> clientsToRemove;
 
     public SimpleServer(NetworkedGame game, String address, int port) {
         this.game = game;
         this.clientListener = new ClientListener(address, port);
 
         sendToClients = Collections.synchronizedList(new ArrayList<>());
+        clientsToRemove = Collections.synchronizedList(new ArrayList<>());
     }
 
     public void sendPacketToClients(Packet packet) {
@@ -95,7 +105,17 @@ public class SimpleServer {
         ArrayList<Packet> packets = new ArrayList<>();
         while (clientListener.isOpen()) {
             synchronized (clientListener.clients) {
-                for (final RemoteClient client : clientListener.clients) {
+                if (!clientsToRemove.isEmpty()) {
+                    clientsToRemove.forEach(id -> {
+                        RemoteClient client = clientListener.clients.remove(id);
+                        System.out.println("Removing client " + id);
+                        if (client != null) {
+                            client.destroy();
+                        }
+                    });
+                    clientsToRemove.clear();
+                }
+                for (final RemoteClient client : clientListener.clients.values()) {
                     Packet packet = client.getNextInboundPacket();
                     if (packet != null) {
                         packets.add(packet);
@@ -114,7 +134,7 @@ public class SimpleServer {
                         if (packet instanceof PlayerJoinPacket) {
                             continue;
                         }
-                        for (final RemoteClient client : clientListener.clients) {
+                        for (final RemoteClient client : clientListener.clients.values()) {
                             // packet.getClient() == null when the server is sending packets.
                             if (packet.getClient() == null || client.getId() != packet.getClient().getId()) {
                                 client.addPacketToOutbound(packet);
@@ -131,5 +151,21 @@ public class SimpleServer {
                 }
             }
         }
+    }
+
+    public void removeClientById(int clientId) {
+        clientsToRemove.add(clientId);
+    }
+
+    public void stop() {
+        int num = 0;
+        synchronized (clientListener.clients) {
+            for (final RemoteClient remoteClient : clientListener.clients.values()) {
+                remoteClient.destroy();
+                num++;
+            }
+        }
+        System.out.println("Destroyed " + num + " clients.");
+        clientListener.stop();
     }
 }
