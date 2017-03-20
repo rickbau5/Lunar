@@ -1,7 +1,9 @@
 package me.vrekt.lunar.server.packets;
 
+import com.sun.corba.se.spi.activation.Server;
 import me.vrekt.lunar.entity.Entity;
 import me.vrekt.lunar.entity.living.player.PlayerEntity;
+import me.vrekt.lunar.entity.living.player.ServerPlayer;
 import me.vrekt.lunar.server.Networking;
 
 import java.io.*;
@@ -39,12 +41,12 @@ public class PlayerJoinPacket extends Packet {
         PlayerEntity template = Networking.GAME_INSTANCE.getPlayer();
         List<Entity> worldEntities = Networking.GAME_INSTANCE.getWorld().getWorldEntities();
         for (Entity worldEntity : worldEntities) {
-            if (worldEntity instanceof PlayerEntity) {
-                getClient().addPacketToOutbound(new PlayerSpawnPacket((PlayerEntity) worldEntity));
+            if (worldEntity instanceof ServerPlayer) {
+                getClient().addPacketToOutbound(new PlayerSpawnPacket((ServerPlayer) worldEntity));
             }
         }
         getClient().addPacketToOutbound(new PlayerSpawnPacket(Networking.GAME_INSTANCE.getPlayer()));
-        PlayerEntity newPlayer = new PlayerEntity(Networking.GAME_INSTANCE.getWorld(), template.getTexture(), x, y, template.getWidth(), template.getHeight(), eId, 100, 0.0);
+        ServerPlayer newPlayer = new ServerPlayer(Networking.GAME_INSTANCE.getWorld(), template.getTexture(), x, y, template.getWidth(), template.getHeight(), eId, 100, 0.0);
 
         Packet packet = new PlayerSpawnPacket(newPlayer);
         packet.setClient(getClient());

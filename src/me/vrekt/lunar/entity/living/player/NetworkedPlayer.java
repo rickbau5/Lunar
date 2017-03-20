@@ -16,7 +16,7 @@ public abstract class NetworkedPlayer extends PlayerEntity implements NetworkedE
     }
 
     @Override
-    public byte[] serialze() throws IOException {
+    public byte[] serialize() throws IOException {
         return PacketManager.withOutStreams((bos, dos) -> {
             dos.writeInt(entityID);
             dos.writeInt(x);

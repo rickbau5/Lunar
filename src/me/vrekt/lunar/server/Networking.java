@@ -7,7 +7,15 @@ import me.vrekt.lunar.server.packets.Packet;
  */
 public final class Networking {
     public static NetworkedGame GAME_INSTANCE;
+
+    /**
+     * RemoteClient is null on game host (server). For clients
+     */
     public static RemoteClient REMOTE_CLIENT;
+
+    /**
+     * Server is not null on the game host, null on all clients.
+     */
     public static SimpleServer SERVER;
 
     public static boolean sendToAllClients(Packet packet) {

@@ -21,14 +21,4 @@ public class LocalPlayer extends NetworkedPlayer {
     public boolean isServer() {
         return false;
     }
-
-    @Override
-    public byte[] serialze() {
-        return new byte[0];
-    }
-
-    @Override
-    public void deserialize(byte[] bytes) {
-
-    }
 }

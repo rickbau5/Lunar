@@ -30,6 +30,7 @@ public class PacketManager {
         registerPacket(PlayerSpawnPacket.class, new PlayerSpawnPacket().getMarker());
         registerPacket(EntityMovementPacket.class, new EntityMovementPacket().getMarker());
         registerPacket(EntitySpawnPacket.class, new EntitySpawnPacket().getMarker());
+        registerPacket(PlayerLeavePacket.class, new PlayerLeavePacket().getMarker());
 
         nextPacketMarker = (byte)registeredPackets.size();
     }

@@ -18,11 +18,6 @@ public class EntityMovementPacket extends Packet {
     public EntityMovementPacket() {}
 
     @Override
-    public byte getMarker() {
-        return 3;
-    }
-
-    @Override
     public byte[] encode() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bos);
@@ -46,6 +41,11 @@ public class EntityMovementPacket extends Packet {
         } else {
             System.err.printf("Couldn't find entity with id %d for %s.", eid, getName());
         }
+    }
+
+    @Override
+    public byte getMarker() {
+        return 3;
     }
 
     @Override

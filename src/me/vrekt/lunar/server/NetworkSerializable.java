@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * Created by Rick on 3/18/2017.
  */
-public interface NetworkSerializiable {
-    byte[] serialze() throws IOException;
+public interface NetworkSerializable {
+    byte[] serialize() throws IOException;
     void deserialize(byte[] bytes) throws IOException;
 }

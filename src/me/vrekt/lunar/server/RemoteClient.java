@@ -92,6 +92,7 @@ public class RemoteClient implements Runnable {
                             }
 
                             packet.setClient(this);
+                            packet.bytes = bytes;
                             packet.decode(new DataInputStream(new ByteArrayInputStream(bytes)));
 
                             inboundPacketQueue.offer(packet);

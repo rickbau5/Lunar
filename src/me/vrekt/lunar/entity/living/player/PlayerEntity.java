@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  * Created by Rick on 3/18/2017.
  */
 public class PlayerEntity extends LivingEntity {
-    private final World world;
+    public final World world;
 
     public PlayerEntity(World world, int x, int y, int width, int height, int entityID, float health, double speed) {
         super(x, y, width, height, entityID, health, speed);

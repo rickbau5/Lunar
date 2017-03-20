@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 public abstract class Packet {
     protected RemoteClient client;
+    public byte[] bytes;
 
     public Packet() {}
 

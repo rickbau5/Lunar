@@ -19,14 +19,12 @@ public class EntitySpawnPacket extends Packet {
 
     @Override
     public byte[] encode() throws IOException {
-        return entity.serialze();
+        return entity.serialize();
     }
 
     @Override
     public void decode(DataInputStream dis) throws IOException {
-        byte[] bytes = new byte[dis.available()];
-        dis.readFully(bytes);
-        entity.deserialize(bytes);
+
     }
 
     @Override
