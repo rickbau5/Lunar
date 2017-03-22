@@ -40,7 +40,7 @@ public class PlayerLeavePacket extends Packet {
 
         if (Networking.SERVER != null) {
             Networking.SERVER.removeClientById(clientId);
-            Networking.sendToAllClients(this);
+            Networking.sendToAll(this);
         }
     }
 

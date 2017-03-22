@@ -22,6 +22,10 @@ public abstract class Entity {
     protected BoundingBox boundingBox;
     protected BufferedImage texture;
 
+    protected World world;
+
+    public Entity() {}
+
     /**
      * Initialize the entity.
      */
@@ -158,6 +162,15 @@ public abstract class Entity {
     public void setTexture(BufferedImage newTexture) {
         texture = newTexture;
     }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
 
     /**
      * Get the entities line of sight.

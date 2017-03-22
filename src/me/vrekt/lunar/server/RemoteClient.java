@@ -124,7 +124,9 @@ public class RemoteClient implements Runnable {
                 Packet outbound = outboundPacketQueue.poll();
                 if (outbound != null) {
                     try {
-                        byte[] bytes = outbound.encode();
+                        byte[] bytes = outbound.bytes;
+                        if (bytes == null)
+                             bytes = outbound.encode();
                         outputStream.write(outbound.getMarker());
                         outputStream.write(bytes.length);
                         outputStream.write(bytes);

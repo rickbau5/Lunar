@@ -1,6 +1,7 @@
 package me.vrekt.lunar.entity.living;
 
 import me.vrekt.lunar.entity.Entity;
+import me.vrekt.lunar.world.World;
 
 import java.awt.image.BufferedImage;
 
@@ -8,6 +9,8 @@ public abstract class LivingEntity extends Entity {
 
 	protected float health;
 	protected double speed;
+
+	public LivingEntity() { }
 
 	/**
 	 * Initialize the entity.

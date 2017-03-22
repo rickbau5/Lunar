@@ -1,5 +1,8 @@
 package me.vrekt.lunar.server;
 
+import me.vrekt.lunar.entity.Entity;
+import me.vrekt.lunar.server.annotations.SerializationHelper;
+import me.vrekt.lunar.server.packets.EntitySpawnPacket;
 import me.vrekt.lunar.server.packets.HandshakePacket;
 import me.vrekt.lunar.server.packets.Packet;
 import me.vrekt.lunar.server.packets.PlayerJoinPacket;
@@ -58,7 +61,7 @@ public class SimpleServer {
 
                 if (clientSocket != null) {
                     RemoteClient newClient = new RemoteClient(game, clientID++, clientSocket);
-                    newClient.addPacketToOutbound(new HandshakePacket(newClient));
+                    newClient.addPacketToOutbound(new HandshakePacket(newClient, EntityRegistry.entityRegistry.entrySet()));
                     clients.put(newClient.getId(), newClient);
                     System.out.println("Accepted client: " + (clientID - 1));
                 }
@@ -167,5 +170,22 @@ public class SimpleServer {
         }
         System.out.println("Destroyed " + num + " clients.");
         clientListener.stop();
+    }
+
+    public void spawnEntity(Entity entity) {
+        if (!EntityRegistry.getIdForEntity(entity.getClass()).isPresent()) {
+            System.err.println("Cannot serialize entity, not registered in EntityRegistry: " + entity);
+            return;
+        }
+
+        Packet spawnPacket = new EntitySpawnPacket(entity);
+        try {
+            spawnPacket.encode();
+            Networking.sendToAll(spawnPacket);
+            Networking.GAME_INSTANCE.getWorld().queueEntityForAdd(entity);
+        } catch (IOException e) {
+            System.err.println("Failed encoding EntitySpawnPacket.");
+            e.printStackTrace();
+        }
     }
 }

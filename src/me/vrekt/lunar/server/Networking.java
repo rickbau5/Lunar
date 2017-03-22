@@ -18,7 +18,7 @@ public final class Networking {
      */
     public static SimpleServer SERVER;
 
-    public static boolean sendToAllClients(Packet packet) {
+    public static boolean sendToAll(Packet packet) {
         if (REMOTE_CLIENT != null) {
             REMOTE_CLIENT.addPacketToOutbound(packet);
             return true;

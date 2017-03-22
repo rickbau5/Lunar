@@ -52,7 +52,7 @@ public class PlayerJoinPacket extends Packet {
 
         Packet packet = new PlayerSpawnPacket(newPlayer);
         packet.setClient(getClient());
-        Networking.sendToAllClients(packet);
+        Networking.sendToAll(packet);
         Networking.GAME_INSTANCE.getWorld().addEntity(newPlayer);
     }
 
