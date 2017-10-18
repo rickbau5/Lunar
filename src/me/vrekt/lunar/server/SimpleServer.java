@@ -25,7 +25,6 @@ public class SimpleServer {
         private int clientID;
 
         private boolean open = true;
-        private boolean _stop;
 
         public ClientListener(String address, int port) {
             this.address = address;
